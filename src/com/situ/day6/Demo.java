@@ -1,5 +1,8 @@
 package com.situ.day6;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author OfferKing
  * @version 1.0
@@ -20,5 +23,8 @@ public class Demo {
 //        System.out.println(chars);
 //        int[] a = {1, 2, 3};
 //        System.out.println(a);
+
+        List list = new ArrayList();
+
     }
 }
