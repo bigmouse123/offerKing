@@ -112,15 +112,35 @@ SELECT * FROM goods WHERE goods_name NOT LIKE '诺基亚%';
 SELECT * FROM goods WHERE cat_id = 3 AND (market_price < 1000 OR market_price > 3000) AND click_count > 5 AND goods_name LIKE '诺基亚%'
 
 -- 15:把goods表中商品名为'诺基亚xxxx'的商品,改为'HTCxxxx',
--- 提示:大胆的把列看成变量,参与运算,甚至调用函数来处理 .
+-- 提示:大胆的把列看成变量,参与运算,甚至调用函数来处理
+UPDATE goods
+	SET goods_name = CONCAT('HTC',SUBSTRING(goods_name,4))
+	WHERE goods_name LIKE '诺基亚%';
+SELECT * FROM goods WHERE goods_name LIKE 'HTC%';
 
 -- 15:计算指定分类(cat_id=3)下面商品的平均价格，计算评价价格时候去掉重复价格的
 -- 只包含不同的值，指定DISTINCT参数
 SELECT goods_name,AVG(DISTINCT market_price) '平均价格' FROM goods WHERE cat_id = 3 GROUP BY goods_name
 
+-- order by 与 limit：
+-- 1、按照栏目由低到高排序，栏目相同按照价格由高到低排序
+SELECT * FROM goods ORDER BY cat_id ASC,market_price DESC
 
+-- 2、取出价格最高的前三名商品
+SELECT * FROM goods ORDER BY market_price DESC LIMIT 0,3
 
+-- 3、取出点击量第三名到第五名的商品
+SELECT * FROM goods ORDER BY click_count DESC LIMIT 2,3
 
+-- group by having
+-- 1、这个店积压的货款：
+SELECT SUM(goods_number*shop_price) AS '总积压贷款' FROM goods;
+
+-- 2、查询该店每个栏目下挤压的货款
+SELECT cat_id,SUM(goods_number*shop_price) AS '积压贷款' FROM goods GROUP BY cat_id
+
+-- 3、查询该店每个栏目下挤压的货款 > 100
+SELECT cat_id,SUM(goods_number*shop_price) AS total_price FROM goods GROUP BY cat_id HAVING total_price > 100
 
 SELECT * FROM goods;
 SELECT * FROM category;
